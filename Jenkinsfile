@@ -10,7 +10,7 @@ pipeline {
             }
         }
 		stage("SonarQube analysis") {
-            agent any
+           
             steps {
 				scripts{
               withSonarQubeEnv('SonarQubeJenkins') {
@@ -22,18 +22,14 @@ pipeline {
 		stage("Quality Gate and build") {
 			steps{
               timeout(time: 1, unit: 'HOURS') {
-              def qg=waitForQualityGate()
-				if (qg.status!= 'OK'){
-					error "pipeline aborted to to quality gate failure and status is : ${qg.status}"
-				}
-				sh 'mvn clean install'
+              waitForQualityGate abortPipeline: true
               }
             }
           }
 		  
-        stage('CleanWS after Build'){
+        stage('Build'){
             steps{
-                cleanWs cleanWhenSuccess: false
+                sh 'mvn clean install'
             }
         }
         
