@@ -12,6 +12,7 @@ pipeline {
 		stage("build & SonarQube analysis") {
             agent any
             steps {
+				scripts{
               withSonarQubeEnv('SonarQubeJenkins') {
                 sh 'mvn sonar:sonar'
               timeout(time: 1, unit: 'HOURS') {
@@ -22,6 +23,7 @@ pipeline {
 				sh 'mvn clean install'
               }
             }
+			}
           }
 		  }
         stage('CleanWS after Build'){
