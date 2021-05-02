@@ -16,9 +16,9 @@ pipeline {
               withSonarQubeEnv('SonarQubeJenkins') {
                 sh 'mvn sonar:sonar'
               timeout(time: 1, unit: 'HOURS') {
-                def qgresult=waitForQualityGate()
-				if (qgresult.status!= 'OK'){
-					error "pipeline aborted to to quality gate failure and status is : ${qgresult.status}"
+              def qg=waitForQualityGate()
+				if (qg.status!= 'OK'){
+					error "pipeline aborted to to quality gate failure and status is : ${qg.status}"
 				}
 				sh 'mvn clean install'
               }
