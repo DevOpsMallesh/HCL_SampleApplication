@@ -15,6 +15,7 @@ pipeline {
 				scripts{
               withSonarQubeEnv('SonarQubeJenkins') {
                 sh 'mvn sonar:sonar'
+				}
               timeout(time: 1, unit: 'HOURS') {
               def qg=waitForQualityGate()
 				if (qg.status!= 'OK'){
@@ -25,7 +26,7 @@ pipeline {
             }
 			}
           }
-		  }
+		  
         stage('CleanWS after Build'){
             steps{
                 cleanWs cleanWhenSuccess: false
